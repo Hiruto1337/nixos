@@ -36,12 +36,7 @@
   };
 
   # NixOS Packages
-  environment.systemPackages = with pkgs; [
-    nnn
-    emacs
-  ];
-
-  # User information stored in ./users.nix
+  environment.systemPackages = with pkgs; [];
   ################################################################
 
   programs.mtr.enable = true;

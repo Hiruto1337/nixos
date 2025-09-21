@@ -4,12 +4,17 @@
   home.stateVersion = "25.05";
   # nixpkgs.config.allowUnfree = true;
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
+
   # Alacritty
   programs.alacritty = {
     enable = true;
     settings = {
       window = {
-        opacity = 0.8;
+        opacity = 0.7;
       };
     };
   };
@@ -25,9 +30,9 @@
   };
 
   # Emacs
-  programs.emacs = {
-    enable = true;
-  };
+  # programs.emacs = {
+  #   enable = true;
+  # };
 
   # Git
   programs.git = {
@@ -45,20 +50,21 @@
     "$terminal" = "alacritty";
     "$fileManager" = "nnn";
     "$menu" = "wofi --show drun";
+    device = {
+      name = "synps/2-synaptics-touchpad";
+      natural_scroll = true;
+      disable_while_typing = true;
+      accel_profile = "adaptive";
+    };
     input = {
       kb_layout = "dk";
       kb_variant = "mac";
-      accel_profile = "adaptive";
-      natural_scroll = true;
-      touchpad = {
-        disable_while_typing = true;
-      };
     };
     monitor = [
       "eDP-1,highres,auto,1.0"
     ];
 
-    exec-once = [ "hyprpaper" "waybar" ];
+    exec-once = [ "hyprpaper" ];
 
     bind =
       [
@@ -79,6 +85,20 @@
           9)
       );
    };
+  };
+
+  # Neovim
+  programs.neovim = {
+    enable = true;
+    extraConfig = ''
+      highlight Normal guibg=none
+      highlight NormalFloat guibg=none
+    '';
+  };
+
+  # nnn
+  programs.nnn = {
+    enable = true;
   };
 
   # Waybar
@@ -138,5 +158,6 @@
     hyprpaper
     neofetch
     firefox
+    discordo
   ];
 }
