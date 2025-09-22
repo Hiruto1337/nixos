@@ -87,12 +87,25 @@
    };
   };
 
-  # Neovim
-  programs.neovim = {
+  # Nixvim
+  programs.nixvim = {
     enable = true;
-    extraConfig = ''
-      highlight Normal guibg=none
-      highlight NormalFloat guibg=none
+    plugins.neo-tree.enable = true;
+    
+    colorschemes.tokyonight = {
+      enable = true;
+      settings.transparent = true;
+    };
+
+    extraConfigLua = ''
+      vim.cmd([[
+        hi Normal guibg=NONE ctermbg=NONE
+        hi NormalNC guibg=NONE ctermbg=NONE
+        hi NormalFloat guibg=NONE ctermbg=NONE
+        hi SignColumn guibg=NONE ctermbg=NONE
+        hi NeoTreeNormal guibg=NONE ctermbg=NONE
+        hi NeoTreeNormalNC guibg=NONE ctermbg=NONE
+      ]])
     '';
   };
 
@@ -158,6 +171,5 @@
     hyprpaper
     neofetch
     firefox
-    discordo
   ];
 }
