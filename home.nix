@@ -41,6 +41,16 @@
     userName = "Hiruto1337";
   };
 
+  # Hyprpaper
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      ipc="on";
+      preload = ["${builtins.toString (./wallpapers/nix-wallpaper.png)}"];
+      wallpaper = [",${builtins.toString (./wallpapers/nix-wallpaper.png)}"];
+    };
+  };
+
   # Hyprland
   wayland.windowManager.hyprland = {
     enable = true;
@@ -168,7 +178,6 @@
   };
   
   home.packages = with pkgs; [
-    hyprpaper
     neofetch
     firefox
   ];

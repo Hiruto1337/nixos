@@ -6,7 +6,10 @@
       ./hardware-configuration.nix
       ./users.nix
     ];
-  
+  xdg.portal.enable = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "broadcom-sta-6.30.223.271-57-6.12.45"
+  ];
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     # substituters = ["https://hyprland.cachix.org"];
