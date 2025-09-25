@@ -2,11 +2,13 @@
 
 {
   home.stateVersion = "25.05";
-  # nixpkgs.config.allowUnfree = true;
-
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+  nixpkgs.config.allowUnfree = true;
+  
+  # Set cursor
+  home.pointerCursor = {
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
   };
 
   # Alacritty
@@ -26,13 +28,11 @@
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake ~/Config/nixos";
       config = "nnn ~/Config/nixos";
+      ovs = "nnn ~/AU/semester_5/OVS";
+      dss = "nnn ~/AU/semester_5/DSS";
+      ml = "nnn ~/AU/semester_5/ML";
     };
   };
-
-  # Emacs
-  # programs.emacs = {
-  #   enable = true;
-  # };
 
   # Git
   programs.git = {
@@ -56,35 +56,52 @@
     enable = true;
     
     settings = {
+    
+    # Variables
     "$mod" = "SUPER";
     "$terminal" = "alacritty";
     "$fileManager" = "nnn";
     "$menu" = "wofi --show drun";
-    device = {
-      name = "synps/2-synaptics-touchpad";
-      natural_scroll = true;
-      disable_while_typing = true;
-      accel_profile = "adaptive";
-    };
+
+    # Touchpad and keyboard
     input = {
       kb_layout = "dk";
       kb_variant = "mac";
+      touchpad = {
+        scroll_factor = 0.3;
+        middle_emulation = false;
+        drag = true;
+        drag_lock = false;
+
+        natural_scroll = true;
+        disable_while_typing = true;
+        accel_profile = "adaptive";
+      };
     };
+
+  #    device = {
+  #      name = "bcm5974";
+  #    };
+
     monitor = [
       "eDP-1,highres,auto,1.0"
     ];
 
-    exec-once = [ "hyprpaper" ];
+    exec-once = [
+    "hyprpaper"
+    "hyprctl setcursor Bibata-Modern-Classic 24"
+    "waybar"
+    ];
 
     bind =
       [
         "$mod, RETURN, exec, $terminal"
         "$mod, SPACE, exec, $menu"
-	      "$mod, Q, killactive,"
+	"$mod, Q, killactive,"
+	"$mod SHIFT, S, exec, gnome-screenshot -f - | wl-copy" 
+	"$mod, I, exec, firefox chatgpt.com"
       ]
       ++ (
-        # workspaces
-        # binds $mod + [shift +] {1..9} to [move to] workspace {1..9}
         builtins.concatLists (builtins.genList (i:
             let ws = i + 1;
             in [
@@ -92,8 +109,11 @@
               "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
             ]
           )
-          9)
+          5)
       );
+    gesture = [
+      "3, horizontal, workspace"
+    ];
    };
   };
 
@@ -127,6 +147,10 @@
   # Waybar
   programs.waybar = {
     enable = true;
+    settings.main = {
+      modules-center = ["clock"];
+      modules-right = ["battery"];
+    };
   };
 
   # Wofi
@@ -176,9 +200,17 @@
       }
     '';
   };
-  
+
+  xresources.properties = {
+    "Xcursor.theme" = "Bibata-Modern-Classic";
+    "Xcursor.size" = 24; # or adjust to taste
+  };
+
   home.packages = with pkgs; [
     neofetch
     firefox
+    discord
+    bibata-cursors
+    gnome-screenshot
   ];
 }
