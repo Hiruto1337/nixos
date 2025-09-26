@@ -73,13 +73,9 @@
       kb_variant = "mac";
       touchpad = {
         scroll_factor = 0.3;
-        middle_emulation = false;
-        drag = true;
         drag_lock = false;
-
         natural_scroll = true;
         disable_while_typing = true;
-        accel_profile = "adaptive";
       };
     };
 
@@ -113,10 +109,6 @@
           )
           5)
       );
-    gesture = [
-      "4, left, hyprctl dispatch workspace e+1"
-      "4, right, hyprctl dispatch workspace e-1"
-    ];
    };
   };
 
@@ -152,9 +144,33 @@
   programs.waybar = {
     enable = true;
     settings.main = {
+      modules-left = ["hyprland/workspaces"];
       modules-center = ["clock"];
-      modules-right = ["battery"];
+      modules-right = ["cpu" "memory" "temperature" "battery"];
+
+      cpu = {
+        format = " {usage}%";
+      };
+
+      memory = {
+        format = " {used}GiB";
+      };
+
+      temperature = {
+        format = " {temperatureC}°C";
+      };
+
+      battery = {
+        format = "󰁽 {capacity}%";
+      };
     };
+
+    style = ''
+    * {
+      font-family: "JetBrainsMono Nerd Font", monospace;
+      font-size: 13px;
+    }
+    '';
   };
 
   # Wofi
@@ -205,10 +221,8 @@
     '';
   };
 
-  #  xresources.properties = {
-  #    "Xcursor.theme" = "Bibata-Modern-Classic";
-  #    "Xcursor.size" = 24; # or adjust to taste
-  #  };
+
+  fonts.fontconfig.enable = true;
 
   home.packages = with pkgs; [
     neofetch
@@ -216,5 +230,6 @@
     discord
     bibata-cursors
     gnome-screenshot
+    nerd-fonts.jetbrains-mono
   ];
 }
