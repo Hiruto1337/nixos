@@ -23,7 +23,7 @@
         ./users.nix
         home-manager.nixosModules.home-manager {
           home-manager.users.lasse_gay = import ./home.nix;
-	  home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
+	  home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
         }
       ];
     };

@@ -3,6 +3,10 @@
 {
   home.stateVersion = "25.05";
   nixpkgs.config.allowUnfree = true;
+
+  home.sessionVariables = {
+    NNN_OPENER = "nvim";
+  };
   
   # Set cursor
   home.pointerCursor = {
@@ -79,13 +83,9 @@
       };
     };
 
-  #    device = {
-  #      name = "bcm5974";
-  #    };
-
-    monitor = [
-      "eDP-1,highres,auto,1.0"
-    ];
+  #    monitor = [
+  #      "eDP-1,highres,auto,1.0"
+  #    ];
 
     exec-once = [
     "hyprpaper"
@@ -100,6 +100,8 @@
 	"$mod, Q, killactive,"
 	"$mod SHIFT, S, exec, gnome-screenshot -f - | wl-copy" 
 	"$mod, I, exec, firefox chatgpt.com"
+	"$mod, A, exec, hyprctl dispatch workspace e-1"
+	"$mod, D, exec, hyprctl dispatch workspace e+1"
       ]
       ++ (
         builtins.concatLists (builtins.genList (i:
@@ -112,7 +114,8 @@
           5)
       );
     gesture = [
-      "3, horizontal, workspace"
+      "4, left, hyprctl dispatch workspace e+1"
+      "4, right, hyprctl dispatch workspace e-1"
     ];
    };
   };
@@ -120,6 +123,7 @@
   # Nixvim
   programs.nixvim = {
     enable = true;
+    plugins.web-devicons.enable = true;
     plugins.neo-tree.enable = true;
     
     colorschemes.tokyonight = {
@@ -201,10 +205,10 @@
     '';
   };
 
-  xresources.properties = {
-    "Xcursor.theme" = "Bibata-Modern-Classic";
-    "Xcursor.size" = 24; # or adjust to taste
-  };
+  #  xresources.properties = {
+  #    "Xcursor.theme" = "Bibata-Modern-Classic";
+  #    "Xcursor.size" = 24; # or adjust to taste
+  #  };
 
   home.packages = with pkgs; [
     neofetch
