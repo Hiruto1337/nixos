@@ -4,10 +4,6 @@
   home.stateVersion = "25.05";
   nixpkgs.config.allowUnfree = true;
 
-  home.sessionVariables = {
-    NNN_OPENER = "nvim";
-  };
-  
   # Set cursor
   home.pointerCursor = {
     gtk.enable = true;
@@ -29,6 +25,7 @@
   programs.bash = {
     enable = true;
     enableCompletion = true;
+    bashrcExtra = "export EDITOR='nvim'";
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake ~/Config/nixos";
       config = "nnn ~/Config/nixos";
@@ -65,7 +62,7 @@
     "$mod" = "SUPER";
     "$terminal" = "alacritty";
     "$fileManager" = "nnn";
-    "$menu" = "wofi --show drun";
+    "$menu" = "walker";
 
     # Touchpad and keyboard
     input = {
@@ -78,10 +75,6 @@
         disable_while_typing = true;
       };
     };
-
-  #    monitor = [
-  #      "eDP-1,highres,auto,1.0"
-  #    ];
 
     exec-once = [
     "hyprpaper"
@@ -98,6 +91,12 @@
 	"$mod, I, exec, firefox chatgpt.com"
 	"$mod, A, exec, hyprctl dispatch workspace e-1"
 	"$mod, D, exec, hyprctl dispatch workspace e+1"
+	", F1, exec, brightnessctl s 10%-"
+	", F2, exec, brightnessctl s 10%+"
+	", F10, exec, pamixer -t"
+	", F11, exec, pamixer -d 10"
+	", F12, exec, pamixer -i 10"
+	"$mod, S, exec, hyprshot -m region --clipboard-only"
       ]
       ++ (
         builtins.concatLists (builtins.genList (i:
@@ -117,6 +116,7 @@
     enable = true;
     plugins.web-devicons.enable = true;
     plugins.neo-tree.enable = true;
+    plugins.nvim-ufo.enable = true;
     
     colorschemes.tokyonight = {
       enable = true;
@@ -140,13 +140,49 @@
     enable = true;
   };
 
+  # VS Code
+  programs.vscode = {
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      # Neovim
+      asvetliakov.vscode-neovim
+
+      # Rust
+      rust-lang.rust-analyzer
+
+      # OCaml
+      ocamllabs.ocaml-platform
+
+      # Go
+      golang.go
+
+      # Python
+      ms-python.python
+
+      # C
+      ms-vscode.cpptools
+
+      # LLVM
+      # rreverser.llvm
+
+      # Dev Containers
+      ms-vscode-remote.remote-containers
+    ];
+  };
+
+  # Walker
+  programs.walker = {
+    enable = true;
+    runAsService = true;
+  };
+
   # Waybar
   programs.waybar = {
     enable = true;
     settings.main = {
-      modules-left = ["hyprland/workspaces"];
+      modules-left = ["custom/nix" "hyprland/workspaces"];
       modules-center = ["clock"];
-      modules-right = ["cpu" "memory" "temperature" "battery"];
+      modules-right = ["cpu" "temperature" "battery"];
 
       cpu = {
         format = " {usage}%";
@@ -161,66 +197,33 @@
       };
 
       battery = {
-        format = "󰁽 {capacity}%";
+        format = "{icon} {capacity}%";
+	format-icons = ["󰂎" "󰁻" "󰁽" "󰁿" "󰁹"];
+      };
+
+      "custom/nix" = {
+        format = "";
+	tooltip = "System info";
+	on-click = "alacritty -e bash -c 'neofetch; exec bash'"; 
       };
     };
 
     style = ''
     * {
       font-family: "JetBrainsMono Nerd Font", monospace;
-      font-size: 13px;
+      font-size: 16px;
+    }
+
+    #cpu, #memory, #temperature, #battery, #custom-nix {
+      padding: 0 8px;
+    }
+
+    #custom-nix {
+      font-size: 20px;
+      color: #5277C3;
     }
     '';
   };
-
-  # Wofi
-  programs.wofi = {
-    enable = true;
-    settings = {
-      show = "drun";
-      prompt = "Search";
-      width = "40%";
-      height = "40%";
-      location = "center";
-      lines = 10;
-      insensitive = true;
-      allow-images = true;
-    };
-    style = ''
-      window {
-        background-color: #282c34;
-        border: 2px solid #1a2f47;
-        border-radius: 8px;
-        font-size: 18px;
-        font-family: "TeX Gyre Adventor", monospace;
-      }
-
-      #outer-box {
-        margin: 8px;
-      }
-
-      #input {
-        background-color: #282c34;
-        color: #e5c07b;
-        margin-bottom: 16px;
-      }
-
-      #scroll {}
-
-      #inner-box {}
-
-      #entry {
-        color: #e5c07b;
-        border-radius: 4px;
-        margin: 4px;
-      }
-
-      #entry:selected {
-        background-color: #343a44;
-      }
-    '';
-  };
-
 
   fonts.fontconfig.enable = true;
 
@@ -228,8 +231,10 @@
     neofetch
     firefox
     discord
+    hyprshot
     bibata-cursors
-    gnome-screenshot
     nerd-fonts.jetbrains-mono
+    brightnessctl
+    pamixer
   ];
 }
