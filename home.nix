@@ -27,13 +27,18 @@
     enableCompletion = true;
     bashrcExtra = "export EDITOR='nvim'";
     shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake ~/Config/nixos";
-      config = "nnn ~/Config/nixos";
+      rebuild = "sudo nixos-rebuild switch --flake ~/.nixos";
+      config = "nnn ~/.nixos";
       ovs = "nnn ~/AU/semester_5/OVS";
       dss = "nnn ~/AU/semester_5/DSS";
       ml = "nnn ~/AU/semester_5/ML";
     };
   };
+
+  # Gestures
+  # programs.libinput-gestures = {
+  #   enable = true;
+  # };
 
   # Git
   programs.git = {
@@ -111,12 +116,17 @@
    };
   };
 
+  # Mako
+  services.mako = {
+    enable = true;
+  };
+
   # Nixvim
   programs.nixvim = {
     enable = true;
     plugins.web-devicons.enable = true;
     plugins.neo-tree.enable = true;
-    plugins.nvim-ufo.enable = true;
+    # plugins.nvim-ufo.enable = true;
     
     colorschemes.tokyonight = {
       enable = true;
@@ -138,37 +148,22 @@
   # nnn
   programs.nnn = {
     enable = true;
+    plugins = {
+      src = (pkgs.fetchFromGitHub {
+        owner = "jarun";
+	repo = "nnn";
+	rev = "master";
+	sha256 = "sha256-Hpc8YaJeAzJoEi7aJ6DntH2VLkoR6ToP6tPYn3llR7k="; 
+      }) + "/plugins";
+
+      mappings = {
+        d = "dragdrop";
+      };
+    };
   };
 
   # VS Code
-  programs.vscode = {
-    enable = true;
-    extensions = with pkgs.vscode-extensions; [
-      # Neovim
-      asvetliakov.vscode-neovim
-
-      # Rust
-      rust-lang.rust-analyzer
-
-      # OCaml
-      ocamllabs.ocaml-platform
-
-      # Go
-      golang.go
-
-      # Python
-      ms-python.python
-
-      # C
-      ms-vscode.cpptools
-
-      # LLVM
-      # rreverser.llvm
-
-      # Dev Containers
-      ms-vscode-remote.remote-containers
-    ];
-  };
+  programs.vscode.enable = true;
 
   # Walker
   programs.walker = {
@@ -232,9 +227,12 @@
     firefox
     discord
     hyprshot
+    libnotify
     bibata-cursors
     nerd-fonts.jetbrains-mono
     brightnessctl
     pamixer
+    zip
+    unzip
   ];
 }
