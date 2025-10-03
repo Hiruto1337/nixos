@@ -119,6 +119,7 @@
   # Mako
   services.mako = {
     enable = true;
+    iconPath = "/run/current-system/sw/share/icons";
   };
 
   # Nixvim
@@ -234,5 +235,26 @@
     pamixer
     zip
     unzip
+
+    # 🦀 Rust
+    pkgs.rustc
+    pkgs.cargo
+    pkgs.rust-analyzer
+
+    # 🐫 OCaml
+    pkgs.ocamlPackages.ocaml
+    pkgs.dune_3
+    pkgs.ocamlPackages.ocaml-lsp
+
+    # 🐍 Python
+    pkgs.python3
+    pkgs.python3Packages.pip
+
+    # 🚀 Go
+    pkgs.go
+
+    # 🔧 Common
+    pkgs.git
+    pkgs.gnumake
   ];
 }
