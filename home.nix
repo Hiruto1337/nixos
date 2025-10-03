@@ -237,24 +237,24 @@
     unzip
 
     # 🦀 Rust
-    pkgs.rustc
-    pkgs.cargo
-    pkgs.rust-analyzer
+    rustc
+    cargo
+    rust-analyzer
 
     # 🐫 OCaml
-    pkgs.ocamlPackages.ocaml
-    pkgs.dune_3
-    pkgs.ocamlPackages.ocaml-lsp
+    ocamlPackages.ocaml
+    dune_3
+    ocamlPackages.ocaml-lsp
 
     # 🐍 Python
-    pkgs.python3
-    pkgs.python3Packages.pip
+    python3
+    python3Packages.pip
 
     # 🚀 Go
-    pkgs.go
+    go
 
     # 🔧 Common
-    pkgs.git
-    pkgs.gnumake
+    git
+    gnumake
   ];
 }
