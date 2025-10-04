@@ -39,7 +39,7 @@
   };
 
   # NixOS Packages
-  environment.systemPackages = with pkgs; [];
+  # environment.systemPackages = with pkgs; [];
   ################################################################
 
   programs.mtr.enable = true;

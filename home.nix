@@ -35,11 +35,6 @@
     };
   };
 
-  # Gestures
-  # programs.libinput-gestures = {
-  #   enable = true;
-  # };
-
   # Git
   programs.git = {
     enable = true;
@@ -60,9 +55,8 @@
   # Hyprland
   wayland.windowManager.hyprland = {
     enable = true;
-    
-    settings = {
-    
+
+    settings = { 
     # Variables
     "$mod" = "SUPER";
     "$terminal" = "alacritty";
@@ -113,6 +107,13 @@
           )
           5)
       );
+
+      gestures = {
+        workspace_swipe = true;
+	workspace_swipe_fingers = 3;
+	workspace_swipe_distance = 1440;
+	workspace_swipe_create_new = true;
+      };
    };
   };
 
@@ -127,7 +128,6 @@
     enable = true;
     plugins.web-devicons.enable = true;
     plugins.neo-tree.enable = true;
-    # plugins.nvim-ufo.enable = true;
     
     colorschemes.tokyonight = {
       enable = true;
