@@ -116,7 +116,7 @@
     # Mako
     services.mako = {
         enable = true;
-        iconPath = "/run/current-system/sw/share/icons";
+        settings.icon-path = "/run/current-system/sw/share/icons";
     };
     
     # Nixvim
@@ -131,7 +131,7 @@
                 settings.transparent = true;
             };
             
-            options = {
+            opts = {
                 foldmethod = "indent";
                 tabstop = 4;
                 shiftwidth = 4;
@@ -170,52 +170,85 @@
     programs.waybar = {
         enable = true;
         settings.main = {
-            modules-left = ["custom/nix" "hyprland/workspaces"];
-            modules-center = ["clock"];
-            modules-right = ["cpu" "temperature" "battery"];
+            modules-left = ["custom/nix"];
+            modules-center = ["hyprland/workspaces"];
+            modules-right = ["cpu" "temperature" "battery" "clock"];
             
             cpu = {
-                format = " {usage}%";
+                format = "🔥{usage}%";
             };
             
             memory = {
-                format = " {used}GiB";
+                format = "🧠{used}GiB";
             };
             
             temperature = {
-                format = " {temperatureC}°C";
+                format = "🌡{temperatureC}°C";
             };
             
             battery = {
-                format = "{icon} {capacity}%";
-                format-icons = ["󰂎" "󰁻" "󰁽" "󰁿" "󰁹"];
+                format-charging = "⚡{capacity}%";
+                format = "{icon}{capacity}%";
+                format-icons = ["🪫" "🔋"];
             };
+
+            clock.tooltip = false;
             
             "custom/nix" = {
-                format = "";
-                tooltip = "System info";
+                format = "❄️";
+                tooltip = false;
                 on-click = "alacritty -e bash -c 'neofetch; exec bash'"; 
             };
         };
     
         style = ''
         * {
-            font-family: "JetBrainsMono Nerd Font", monospace;
             font-size: 16px;
         }
-        
-        #cpu, #memory, #temperature, #battery, #custom-nix {
+
+        /* Entire bar */
+        window#waybar {
+            background: rgba(30, 30, 30, 0.9);
+            color: #ffffff;
+            border-bottom: 2px solid #444;
+            /* font-family: "JetBrainsMono Nerd Font", monospace; */
+            font-size: 12px;
+        }
+
+        /* Internal bar container */
+        #bar {
+            padding: 4px 6px;
+        }
+
+        /* Left, center, right areas */
+        #modules-left {
+            background: transparent;
+            padding-left: 10px;
+        }
+
+        #modules-center {
+            background: transparent;
+        }
+
+        #modules-right {
+            background: transparent;
+            padding-right: 10px;
+        }
+
+        #cpu, #memory, #temperature, #battery, #clock, #custom-nix {
             padding: 0 8px;
         }
         
+        /*
         #custom-nix {
             font-size: 20px;
-            color: #5277C3;
+            color: #7EBAE4; 
         }
+        */
         '';
     };
     
-    fonts.fontconfig.enable = true;
+    # fonts.fontconfig.enable = true;
     
     home.packages = with pkgs; [
         neofetch
@@ -224,7 +257,7 @@
         hyprshot
         libnotify
         bibata-cursors
-        nerd-fonts.jetbrains-mono
+        # nerd-fonts.jetbrains-mono
         brightnessctl
         pamixer
         zip
