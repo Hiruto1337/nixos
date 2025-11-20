@@ -41,6 +41,9 @@
         userEmail = "https://Hiruto1337@github.com";
         userName = "Hiruto1337";
     };
+
+    # HTop
+    programs.htop.enable = true;
     
     # Hyprpaper
     services.hyprpaper = {
@@ -68,10 +71,11 @@
                 kb_layout = "dk";
                 kb_variant = "mac";
                 touchpad = {
-                scroll_factor = 0.3;
-                drag_lock = false;
-                natural_scroll = true;
-                disable_while_typing = true;
+                    scroll_factor = 0.3;
+                    drag_lock = 0;
+                    natural_scroll = true;
+                    disable_while_typing = true;
+                    clickfinger_behavior = true;
                 };
             };
     
@@ -89,12 +93,14 @@
                 "$mod, I, exec, firefox chatgpt.com"
                 "$mod, A, exec, hyprctl dispatch workspace e-1"
                 "$mod, D, exec, hyprctl dispatch workspace e+1"
-                ", F1, exec, brightnessctl s 10%-"
-                ", F2, exec, brightnessctl s 10%+"
-                ", F10, exec, pamixer -t"
-                ", F11, exec, pamixer -d 10"
-                ", F12, exec, pamixer -i 10"
+                ", F1, exec, brightnessctl s 10%- && notify-send '💡🔽' -t 500"
+                ", F2, exec, brightnessctl s 10%+ && notify-send '💡🔼' -t 500"
+                ", F10, exec, pamixer -t   && notify-send '🔕' -t 500"
+                ", F11, exec, pamixer -d 5 && notify-send '🔔🔽' -t 500"
+                ", F12, exec, pamixer -i 5 && notify-send '🔔🔼' -t 500"
                 "$mod, S, exec, hyprshot -m region --clipboard-only"
+                ", mouse:274, exec, "
+                "$mod, F, exec, hyprctl dispatch fullscreen"
             ]
             ++
             (
@@ -103,6 +109,10 @@
                     "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
                 ]) 5)
             );
+
+            misc = {
+                middle_click_paste = false;
+            };                    
     
             gestures = {
                 workspace_swipe = true;
@@ -170,49 +180,57 @@
     programs.waybar = {
         enable = true;
         settings.main = {
-            modules-left = ["custom/nix"];
+            modules-left = ["custom/nix" "hyprland/window"];
             modules-center = ["hyprland/workspaces"];
             modules-right = ["cpu" "temperature" "battery" "clock"];
-            
             cpu = {
-                format = "🔥{usage}%";
+                format = "{usage}%🔥";
             };
-            
-            memory = {
-                format = "🧠{used}GiB";
-            };
-            
+                
             temperature = {
-                format = "🌡{temperatureC}°C";
+                format = "{temperatureC}°C🌡";
+                thermal-zone = 2;
             };
-            
+                
             battery = {
-                format-charging = "⚡{capacity}%";
-                format = "{icon}{capacity}%";
+                format-charging = "{capacity}%⚡";
+                format = "{capacity}%{icon}";
                 format-icons = ["🪫" "🔋"];
             };
-
+    
             clock.tooltip = false;
-            
+                
             "custom/nix" = {
                 format = "❄️";
                 tooltip = false;
                 on-click = "alacritty -e bash -c 'neofetch; exec bash'"; 
             };
+    
+            "hyprland/workspaces" = {
+                "persistent-workspaces" = { "*" = 5; };
+                "format" = "{icon}";
+                "format-icons" = {
+                    "default" = "🌸";
+                    "active" = "🏵️";
+                };
+            };
+
+#            "hyprland/window" = {
+#                "format" = "{icon} {app_id}";
+#                "max-length" = 30;
+#                "icon" = true;
+#                "icon-size" = 16;
+#            };
         };
     
         style = ''
-        * {
-            font-size: 16px;
-        }
-
         /* Entire bar */
         window#waybar {
             background: rgba(30, 30, 30, 0.9);
             color: #ffffff;
-            border-bottom: 2px solid #444;
+            border-bottom: 1px solid #444;
             /* font-family: "JetBrainsMono Nerd Font", monospace; */
-            font-size: 12px;
+            font-size: 16px;
         }
 
         /* Internal bar container */
@@ -220,7 +238,6 @@
             padding: 4px 6px;
         }
 
-        /* Left, center, right areas */
         #modules-left {
             background: transparent;
             padding-left: 10px;
@@ -238,6 +255,10 @@
         #cpu, #memory, #temperature, #battery, #clock, #custom-nix {
             padding: 0 8px;
         }
+
+        #clock {
+            font-weight: bold;
+        }
         
         /*
         #custom-nix {
@@ -246,9 +267,7 @@
         }
         */
         '';
-    };
-    
-    # fonts.fontconfig.enable = true;
+    }; 
     
     home.packages = with pkgs; [
         neofetch
@@ -257,31 +276,10 @@
         hyprshot
         libnotify
         bibata-cursors
-        # nerd-fonts.jetbrains-mono
         brightnessctl
         pamixer
         zip
         unzip
-        
-        # 🦀 Rust
-        rustc
-        cargo
-        rust-analyzer
-        
-        # 🐫 OCaml
-        ocamlPackages.ocaml
-        dune_3
-        ocamlPackages.ocaml-lsp
-        
-        # 🐍 Python
-        python3
-        python3Packages.pip
-        
-        # 🚀 Go
-        go
-        
-        # 🔧 Common
-        git
-        gnumake
+        ngrok
     ];
 }
