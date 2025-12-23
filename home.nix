@@ -18,6 +18,15 @@
             window = {
                 opacity = 0.7;
             };
+
+            font = {
+                normal = {
+                    family = "Code Saver";
+                    style = "Regular";
+                };
+                
+                # size = 12;
+            };
         };
     };
     
@@ -38,8 +47,10 @@
     # Git
     programs.git = {
         enable = true;
-        userEmail = "https://Hiruto1337@github.com";
-        userName = "Hiruto1337";
+        settings.user = {
+            email = "https://Hiruto1337@github.com";
+            name = "Hiruto1337";
+        };
     };
 
     # HTop
@@ -58,7 +69,6 @@
     # Hyprland
     wayland.windowManager.hyprland = {
         enable = true;
-    
         settings = { 
             # Variables
             "$mod" = "SUPER";
@@ -93,14 +103,15 @@
                 "$mod, I, exec, firefox chatgpt.com"
                 "$mod, A, exec, hyprctl dispatch workspace e-1"
                 "$mod, D, exec, hyprctl dispatch workspace e+1"
-                ", F1, exec, brightnessctl s 10%- && notify-send '💡🔽' -t 500"
-                ", F2, exec, brightnessctl s 10%+ && notify-send '💡🔼' -t 500"
-                ", F10, exec, pamixer -t   && notify-send '🔕' -t 500"
-                ", F11, exec, pamixer -d 5 && notify-send '🔔🔽' -t 500"
-                ", F12, exec, pamixer -i 5 && notify-send '🔔🔼' -t 500"
+                ", F1, exec, brightnessctl s 10%-"
+                ", F2, exec, brightnessctl s 10%+"
+                ", F10, exec, pamixer -t"
+                ", F11, exec, pamixer -d 5"
+                ", F12, exec, pamixer -i 5"
                 "$mod, S, exec, hyprshot -m region --clipboard-only"
                 ", mouse:274, exec, "
                 "$mod, F, exec, hyprctl dispatch fullscreen"
+                "$mod SHIFT, D, exec, firefox discord.com/channels/@me"
             ]
             ++
             (
@@ -112,14 +123,11 @@
 
             misc = {
                 middle_click_paste = false;
-            };                    
-    
-            gestures = {
-                workspace_swipe = true;
-                workspace_swipe_fingers = 3;
-                workspace_swipe_distance = 1440;
-                workspace_swipe_create_new = true;
             };
+
+            gesture = [
+                "4, horizontal, workspace"
+            ];
         };
     };
     
@@ -272,7 +280,6 @@
     home.packages = with pkgs; [
         neofetch
         firefox
-        discord
         hyprshot
         libnotify
         bibata-cursors
@@ -281,5 +288,12 @@
         zip
         unzip
         ngrok
+        sublime4
+        sublime-merge
+        rust-analyzer
+    ];
+
+    nixpkgs.config.permittedInsecurePackages = [
+        "openssl-1.1.1w"
     ];
 }

@@ -8,8 +8,9 @@
     ];
   xdg.portal.enable = true;
   nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-57-6.12.55"
+    "broadcom-sta-6.30.223.271-59-6.12.59"
   ];
+
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     # substituters = ["https://hyprland.cachix.org"];
@@ -30,12 +31,10 @@
   ################################################################
   # NixOS Modules
   programs.hyprland.enable = true;
-  services.xserver = {
-    displayManager.gdm.enable = true;
-    xkb = {
+  services.displayManager.gdm.enable = true;
+  services.xserver.xkb = {
       layout = "dk";
       variant = "";
-    };
   };
 
   # NixOS Packages
